@@ -8,11 +8,11 @@ import (
 	"example.com/Todo/database"
 )
 
-func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
+func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s request to %s\n", r.Method, r.URL.Path)
 
-	//Checks if the request is a POST Methhod
-	if r.Method != http.MethodPost {
+	//Checks if the request is a GET Methhod
+	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -23,17 +23,14 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	title := r.FormValue("title")
-	status := r.FormValue("status")
-
 	// Insert data into the PostgreSQL database
-	insertQuery := "INSERT INTO todos (title, status) VALUES ($1, $2)"
-	_, err = database.DB.Exec(insertQuery, title, status)
+	getAllQuery := "SELECT * FROM todos"
+	_, err = database.DB.Exec(getAllQuery)
 	if err != nil {
-		log.Println("Error inserting data into the database:", err)
+		log.Println("Error retrieving data from the database:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Fprint(w, "Data successfully submitted and stored in the database")
+	fmt.Fprint(w, "Data successfully retrieved from the database")
 }
