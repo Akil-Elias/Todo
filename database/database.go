@@ -24,7 +24,6 @@ func loadEnv() {
 
 func Init() {
 	// Initialize the database connection
-	//connStr := "postgresql://Akil-Elias:k7CI6oLEZeAM@ep-calm-leaf-80663857.us-east-1.aws.neon.tech/todoDB?sslmode=require"
 	loadEnv()
 	var err error
 	DB, err = sql.Open("postgres", connectionStr)
