@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>htmx Form Example</title>
+    <title>To do App</title>
     <!-- Include htmx library -->
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
 </head>
 <body>
 
-<form hx-post="http://localhost:8080/submit" method="post" hx-target="#result" hx-trigger="submit">
+<form hx-post="http://localhost:8080/create" method="post" hx-target="#result" hx-trigger="submit">
     <label for="status">Title:</label>
     <input type="text" id="title" name="title" required><br>
 
@@ -18,6 +18,8 @@
 
     <button type="submit" hx-target="#result">Submit</button>
 </form>
+
+<ul id="task-list" hx-get="http://localhost:8080/getall" hx-trigger="load"></ul>
 
 <div id="result"></div>
 

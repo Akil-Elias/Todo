@@ -24,7 +24,7 @@ func main() {
 
 	// Register the handler functions with CORS middleware
 	http.Handle("/", c.Handler(http.HandlerFunc(handlers.HomePageHandler)))
-	http.Handle("/submit", c.Handler(http.HandlerFunc(handlers.CreateTaskHandler)))
+	http.Handle("/create", c.Handler(http.HandlerFunc(handlers.CreateTaskHandler)))
 	http.Handle("/getall", c.Handler(http.HandlerFunc(handlers.GetAllTaskHandler)))
 	http.ListenAndServe(port, nil)
 }

@@ -1,12 +1,25 @@
 package handlers
 
 import (
-	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 
 	"example.com/Todo/database"
 )
+
+type Task struct {
+	Title  string
+	Status string
+}
+
+const dataTemplate = `
+{{range .}}
+<li>{{.Title}} - {{.Status}}</li>
+{{end}}
+`
+
+var tmpl = template.Must(template.New("data").Parse(dataTemplate))
 
 func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s request to %s\n", r.Method, r.URL.Path)
@@ -17,20 +30,28 @@ func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "Error parsing form data", http.StatusBadRequest)
-		return
-	}
-
-	// Insert data into the PostgreSQL database
 	getAllQuery := "SELECT * FROM todos"
-	_, err = database.DB.Exec(getAllQuery)
+	rows, err := database.DB.Query(getAllQuery)
 	if err != nil {
-		log.Println("Error retrieving data from the database:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		http.Error(w, "Error executing query", http.StatusInternalServerError)
 		return
 	}
+	defer rows.Close()
 
-	fmt.Fprint(w, "Data successfully retrieved from the database")
+	var tasks []Task
+	for rows.Next() {
+		var task Task
+		if err := rows.Scan(&task.Title, &task.Status); err != nil {
+			http.Error(w, "Error scanning row", http.StatusInternalServerError)
+			return
+		}
+		tasks = append(tasks, task)
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	tmpl.Execute(w, tasks)
+	if err != nil {
+		http.Error(w, "Error rendering HTML", http.StatusInternalServerError)
+		return
+	}
 }
