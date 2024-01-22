@@ -15,7 +15,7 @@ type Task struct {
 
 const dataTemplate = `
 {{range .}}
-<li>{{.Title}} - {{.Status}}</li>
+<li>{{.Title}} - {{.Status}}<span><i class="fa-solid fa-trash-can"></i></span></li>
 {{end}}
 `
 
