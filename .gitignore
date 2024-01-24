@@ -1,2 +1,4 @@
 # ignore all .env files
 .env
+Todo.exe
+node_modules

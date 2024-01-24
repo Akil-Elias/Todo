@@ -17,7 +17,7 @@ func main() {
 	// Handler CORS
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"}, // Adjust this according to your needs
-		AllowedMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Content-Type", "Hx-Current-Url", "Hx-Request", "Hx-Target"},
 		Debug:          true,
 	})
@@ -26,5 +26,6 @@ func main() {
 	http.Handle("/", c.Handler(http.HandlerFunc(handlers.HomePageHandler)))
 	http.Handle("/create", c.Handler(http.HandlerFunc(handlers.CreateTaskHandler)))
 	http.Handle("/getall", c.Handler(http.HandlerFunc(handlers.GetAllTaskHandler)))
+	http.Handle("/delete", c.Handler(http.HandlerFunc(handlers.DeleteTaskHandler)))
 	http.ListenAndServe(port, nil)
 }
