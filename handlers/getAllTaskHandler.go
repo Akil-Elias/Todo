@@ -9,6 +9,7 @@ import (
 )
 
 type Task struct {
+	ID     int
 	Title  string
 	Status string
 }
@@ -17,7 +18,7 @@ const dataTemplate = `
 {{range .}}
 <li>{{.Title}} - {{.Status}}
 	<span>
-		<i hx-delete="http://localhost:8080/delete" method="delete" hx-trigger="click" class="fa-solid fa-trash-can"></i>
+		<i hx-delete="http://localhost:8080/delete?id={{.ID}}" method="delete" hx-trigger="click" class="fa-solid fa-trash-can"></i>
 	</span>
 </li>
 {{end}}
@@ -34,7 +35,7 @@ func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getAllQuery := "SELECT * FROM todos"
+	getAllQuery := "SELECT * FROM tasks"
 	rows, err := database.DB.Query(getAllQuery)
 	if err != nil {
 		http.Error(w, "Error executing query", http.StatusInternalServerError)
@@ -45,7 +46,7 @@ func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var tasks []Task
 	for rows.Next() {
 		var task Task
-		if err := rows.Scan(&task.Title, &task.Status); err != nil {
+		if err := rows.Scan(&task.ID, &task.Title, &task.Status); err != nil {
 			http.Error(w, "Error scanning row", http.StatusInternalServerError)
 			return
 		}

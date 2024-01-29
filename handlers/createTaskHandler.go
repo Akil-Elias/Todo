@@ -27,7 +27,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	status := r.FormValue("status")
 
 	// Insert data into the PostgreSQL database
-	insertQuery := "INSERT INTO todos (title, status) VALUES ($1, $2)"
+	insertQuery := "INSERT INTO tasks (title, status) VALUES ($1, $2)"
 	_, err = database.DB.Exec(insertQuery, title, status)
 	if err != nil {
 		log.Println("Error inserting data into the database:", err)

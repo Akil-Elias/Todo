@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"example.com/Todo/database"
 )
@@ -18,16 +19,21 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	params := r.URL.Query()
-	titleStr := params.Get("title")
-	fmt.Printf("the title is %s", titleStr)
+	idStr := params.Get("id")
 
-	deleteQuery := "DELETE FROM todos WHERE title = $1"
-	_, err := database.DB.Exec(deleteQuery, titleStr)
+	// Convert the 'id' parameter to an integer
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid 'id' parameter", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("%d", id)
+
+	deleteQuery := "DELETE FROM tasks WHERE taskid = $1"
+	_, err = database.DB.Exec(deleteQuery, id)
 	if err != nil {
 		log.Println("Error deleting data from the database:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-
-	fmt.Fprint(w, "Data successfully deleted from the database")
 }

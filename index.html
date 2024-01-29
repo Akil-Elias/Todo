@@ -8,21 +8,18 @@
     <script src="https://unpkg.com/htmx.org@1.7.0/dist/htmx.js"></script>
     <!-- Include Font Awesome library -->
     <script src="https://kit.fontawesome.com/5e1ce45af9.js" crossorigin="anonymous"></script>
-    <!-- Include Tailwind library -->
-    <link href="./src/output.css" rel="stylesheet">
-    
 </head>
 <body>
 
-<form hx-post="http://localhost:8080/create" method="post" hx-target="#result" hx-trigger="submit">
-    <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Title:</label>
-    <input type="text" id="title" name="title" required class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Enter Title"><br>
+    <form hx-post="http://localhost:8080/create" method="post" hx-target="#result" hx-trigger="submit">
+        <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Title:</label>
+        <input type="text" id="title" name="title" placeholder="Enter Title"><br>
 
-    <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Status:</label>
-    <input type="text" id="status" name="status" required class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Enter Status"><br>
+        <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Status:</label>
+        <input type="text" id="status" name="status" placeholder="Enter Status"><br>
 
-    <button type="submit" hx-target="#result">Submit</button>
-</form>
+        <button type="submit" hx-target="#result">Submit</button>
+    </form>
 
 <ul id="task-list" hx-get="http://localhost:8080/getall" hx-trigger="load"></ul>
 
