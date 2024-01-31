@@ -21,7 +21,13 @@
         <button type="submit" hx-target="#result">Submit</button>
     </form>
 
-<ul id="task-list" hx-get="http://localhost:8080/getall" hx-trigger="load"></ul>
+<table>
+    <thead>
+        <th>Title</th>
+        <th>Status</th>
+    </thead>
+    <tbody id="task-list" hx-get="http://localhost:8080/getall" hx-trigger="load"></tbody>
+</table>
 
 <div id="result"></div>
 

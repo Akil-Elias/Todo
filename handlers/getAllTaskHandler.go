@@ -16,11 +16,14 @@ type Task struct {
 
 const dataTemplate = `
 {{range .}}
-<li>{{.Title}} - {{.Status}}
-	<span>
-		<i hx-delete="http://localhost:8080/delete?id={{.ID}}" method="delete" hx-trigger="click" class="fa-solid fa-trash-can"></i>
-	</span>
-</li>
+<tr>
+	<td>
+		<span> 
+			{{.Title}} - {{.Status}}
+		</span>
+		<button hx-delete="http://localhost:8080/delete?id={{.ID}}" method="delete" hx-trigger="click" class="fa-solid fa-trash-can"></button>
+	</td>
+</tr>
 {{end}}
 `
 
