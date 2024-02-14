@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"example.com/Todo/database"
+	"example.com/Todo/src/database"
 )
 
 func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {

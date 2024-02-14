@@ -3,8 +3,9 @@ package main
 import (
 	"net/http"
 
-	"example.com/Todo/database"
-	"example.com/Todo/handlers"
+	"example.com/Todo/src/controllers"
+	"example.com/Todo/src/database"
+	"example.com/Todo/src/handlers"
 	"github.com/rs/cors"
 )
 
@@ -15,17 +16,20 @@ func main() {
 	database.Init()
 
 	// Handler CORS
-	c := cors.New(cors.Options{
+	cors := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"}, // Adjust this according to your needs
-		AllowedMethods: []string{"GET", "POST", "DELETE", "OPTIONS"},
+		AllowedMethods: []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
 		AllowedHeaders: []string{"Content-Type", "Hx-Current-Url", "Hx-Request", "Hx-Target"},
 		Debug:          true,
 	})
 
 	// Register the handler functions with CORS middleware
-	http.Handle("/", c.Handler(http.HandlerFunc(handlers.HomePageHandler)))
-	http.Handle("/create", c.Handler(http.HandlerFunc(handlers.CreateTaskHandler)))
-	http.Handle("/getall", c.Handler(http.HandlerFunc(handlers.GetAllTaskHandler)))
-	http.Handle("/delete", c.Handler(http.HandlerFunc(handlers.DeleteTaskHandler)))
+	http.Handle("/", cors.Handler(http.HandlerFunc(handlers.HomePageHandler)))
+	http.Handle("/create", cors.Handler(http.HandlerFunc(handlers.CreateTaskHandler)))
+	http.Handle("/fetchAll", cors.Handler(http.HandlerFunc(handlers.FetchAllTaskHandler)))
+	http.Handle("/edit_task", cors.Handler(http.HandlerFunc(controllers.EditTask)))
+	http.Handle("/delete", cors.Handler(http.HandlerFunc(handlers.DeleteTaskHandler)))
+	http.Handle("/put", cors.Handler(http.HandlerFunc(handlers.UpdateTaskHandler)))
+
 	http.ListenAndServe(port, nil)
 }

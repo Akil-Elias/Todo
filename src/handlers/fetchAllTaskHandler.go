@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"example.com/Todo/database"
+	"example.com/Todo/src/database"
 )
 
 type Task struct {
@@ -14,22 +14,27 @@ type Task struct {
 	Status string
 }
 
-const dataTemplate = `
+const fetchDataTemplate = `
 {{range .}}
 <tr>
 	<td>
-		<span> 
+		<span id="task_card{{.ID}}"> 
 			{{.Title}} - {{.Status}}
 		</span>
-		<button hx-delete="http://localhost:8080/delete?id={{.ID}}" method="delete" hx-trigger="click" class="fa-solid fa-trash-can"></button>
+
+		<button hx-delete="http://localhost:8080/delete?id={{.ID}}" hx-trigger="click" class="fa-solid fa-trash-can"></button>
+
+		<span>
+			<button hx-get="http://localhost:8080/edit_task" hx-swap="innerHTML" hx-target="#task_card{{.ID}}" class="fa-regular fa-pen-to-square"></button>
+		</span>
 	</td>
 </tr>
 {{end}}
 `
 
-var tmpl = template.Must(template.New("data").Parse(dataTemplate))
+var tmpl = template.Must(template.New("data").Parse(fetchDataTemplate))
 
-func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
+func FetchAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s request to %s\n", r.Method, r.URL.Path)
 
 	//Checks if the request is a GET Methhod
@@ -38,8 +43,8 @@ func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	getAllQuery := "SELECT * FROM tasks"
-	rows, err := database.DB.Query(getAllQuery)
+	fetchAllQuery := "SELECT * FROM tasks"
+	rows, err := database.DB.Query(fetchAllQuery)
 	if err != nil {
 		http.Error(w, "Error executing query", http.StatusInternalServerError)
 		return
@@ -49,7 +54,7 @@ func GetAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	var tasks []Task
 	for rows.Next() {
 		var task Task
-		if err := rows.Scan(&task.ID, &task.Title, &task.Status); err != nil {
+		if err := rows.Scan(&task.ID, &task.Title, &task.Status); err != nil { //WTF
 			http.Error(w, "Error scanning row", http.StatusInternalServerError)
 			return
 		}
