@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 
-	"example.com/Todo/src/controllers"
 	"example.com/Todo/src/database"
 	"example.com/Todo/src/handlers"
 	"github.com/rs/cors"
@@ -27,7 +26,6 @@ func main() {
 	http.Handle("/", cors.Handler(http.HandlerFunc(handlers.HomePageHandler)))
 	http.Handle("/create", cors.Handler(http.HandlerFunc(handlers.CreateTaskHandler)))
 	http.Handle("/fetchAll", cors.Handler(http.HandlerFunc(handlers.FetchAllTaskHandler)))
-	http.Handle("/edit_task", cors.Handler(http.HandlerFunc(controllers.EditTask)))
 	http.Handle("/delete", cors.Handler(http.HandlerFunc(handlers.DeleteTaskHandler)))
 	http.Handle("/put", cors.Handler(http.HandlerFunc(handlers.UpdateTaskHandler)))
 

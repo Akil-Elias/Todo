@@ -17,7 +17,7 @@ type Task struct {
 const fetchDataTemplate = `
 {{range .}}
 <tr>
-	<td>
+	<td x-data="{ open: false }">
 		<span id="task_card{{.ID}}"> 
 			{{.Title}} - {{.Status}}
 		</span>
@@ -25,14 +25,25 @@ const fetchDataTemplate = `
 		<button hx-delete="http://localhost:8080/delete?id={{.ID}}" hx-trigger="click" class="fa-solid fa-trash-can"></button>
 
 		<span>
-			<button hx-get="http://localhost:8080/edit_task" hx-swap="innerHTML" hx-target="#task_card{{.ID}}" class="fa-regular fa-pen-to-square"></button>
+			<button @click="open = true" hx-swap="innerHTML" hx-target="#task_card{{.ID}}" class="fa-regular fa-pen-to-square"></button>
+		</span>
+
+		<span x-show="open">
+			<form id="edit_form" hx-put="http://localhost:8080/put?id={{.ID}}" hx-vals="#edit_form">
+				<label for="edit_title">Title:</label>
+				<input type="text" name="edit_title" placeholder="Enter Title"><br>
+
+				<label for="edit_status">Status:</label>
+				<input type="text" name="edit_status" placeholder="Enter Status"><br>
+				<button type="submit">Submit</button>
+			</form>
 		</span>
 	</td>
 </tr>
 {{end}}
 `
 
-var tmpl = template.Must(template.New("data").Parse(fetchDataTemplate))
+var fetch_tmpl = template.Must(template.New("data").Parse(fetchDataTemplate))
 
 func FetchAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Received %s request to %s\n", r.Method, r.URL.Path)
@@ -62,7 +73,7 @@ func FetchAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	tmpl.Execute(w, tasks)
+	fetch_tmpl.Execute(w, tasks)
 	if err != nil {
 		http.Error(w, "Error rendering HTML", http.StatusInternalServerError)
 		return

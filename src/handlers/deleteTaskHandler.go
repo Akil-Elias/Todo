@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -27,7 +26,6 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid 'id' parameter", http.StatusBadRequest)
 		return
 	}
-	fmt.Printf("%d", id)
 
 	deleteQuery := "DELETE FROM tasks WHERE taskid = $1"
 	_, err = database.DB.Exec(deleteQuery, id)
