@@ -10,9 +10,13 @@
     <script src="//unpkg.com/alpinejs" defer></script>
     <!-- Include Font Awesome library -->
     <script src="https://kit.fontawesome.com/5e1ce45af9.js" crossorigin="anonymous"></script>
+    <!-- Include Tailwind library -->
+    <link href="./output.css" rel="stylesheet">
 </head>
 <body>
-
+    <h1 class="text-3xl font-bold underline">
+        To Do App
+      </h1>
     <form hx-post="http://localhost:8080/create" method="post" hx-target="#result" hx-trigger="submit">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" placeholder="Enter Title"><br>
