@@ -73,7 +73,7 @@ func FetchAllTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "text/html")
-	fetch_tmpl.Execute(w, tasks)
+	err = fetch_tmpl.Execute(w, tasks)
 	if err != nil {
 		http.Error(w, "Error rendering HTML", http.StatusInternalServerError)
 		return
